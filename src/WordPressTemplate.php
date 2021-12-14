@@ -48,26 +48,31 @@ class WordPressTemplate {
 		}
 
 		if ( ! $rendered ) {
-			$templates = array();
-
-			foreach ( $this->folders as $folder ) {
-				if ( ! empty( $name ) ) {
-					$templates[] = $folder . '/' . $slug . '-' . $name . '.php';
-				}
-			}
-
-			foreach ( $this->folders as $folder ) {
-				$templates[] = $folder . '/' . $slug . '.php';
-			}
-
-			foreach ( $templates as $template ) {
-				if ( file_exists( $template ) ) {
-					load_template( $template, false, $args );
-					break;
-				}
-			}
+			load_template( $this->get_template_path( $slug, $name ), false, $args );
 		}
 
 		return ob_get_clean();
+	}
+
+	public function get_template_path( string $slug, string $name = null ) {
+		$templates = array();
+
+		if ( ! empty( $name ) ) {
+			foreach ( $this->folders as $folder ) {
+				$templates[] = $folder . '/' . $slug . '-' . $name . '.php';
+			}
+		}
+
+		foreach ( $this->folders as $folder ) {
+			$templates[] = $folder . '/' . $slug . '.php';
+		}
+
+		foreach ( $templates as $template ) {
+			if ( file_exists( $template ) ) {
+				return $template;
+			}
+		}
+
+		return '';
 	}
 }
