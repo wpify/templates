@@ -1,4 +1,4 @@
-# WPify Taxonomy
+# WPify Template
 
 Abstraction over WordPress Templates.
 
