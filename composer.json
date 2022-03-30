@@ -14,5 +14,7 @@
             "email": "info@wpify.io"
         }
     ],
-    "require": {}
+    "require": {
+        "twig/twig": "^3.0"
+    }
 }
