@@ -1,6 +1,6 @@
 {
-    "name": "wpify/template",
-    "description": "WPify Template",
+    "name": "wpify/templates",
+    "description": "WPify Templates",
     "type": "library",
     "license": "GPL-2.0-or-later",
     "autoload": {
