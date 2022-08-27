@@ -1,6 +1,6 @@
 <?php
 
-namespace Wpify\Template;
+namespace Wpify\Templates;
 
 use Twig\Environment;
 use Twig\Error\LoaderError;

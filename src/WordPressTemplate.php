@@ -1,6 +1,6 @@
 <?php
 
-namespace Wpify\Template;
+namespace Wpify\Templates;
 
 class WordPressTemplate {
 	/** @var string[] */

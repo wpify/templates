@@ -4,12 +4,12 @@ Abstraction over WordPress Templates.
 
 ## Installation
 
-`composer require wpify/template`
+`composer require wpify/templates`
 
 ## Usage
 
 ```php
-use Wpify\Template\WordPressTemplate;
+use Wpify\Templates\WordPressTemplate;
 
 // Initialize the templates
 $template = new WordPressTemplate(

@@ -5,7 +5,7 @@
     "license": "GPL-2.0-or-later",
     "autoload": {
         "psr-4": {
-            "Wpify\\Template\\": "src/"
+            "Wpify\\Templates\\": "src/"
         }
     },
     "authors": [
@@ -15,6 +15,6 @@
         }
     ],
     "require": {
-        "twig/twig": "^3.0"
+        "twig/twig": "^3.4"
     }
 }
