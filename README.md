@@ -9,10 +9,10 @@ Abstraction over WordPress Templates.
 ## Usage
 
 ```php
-use Wpify\Templates\WordPressTemplate;
+use Wpify\Templates\WordPressTemplates;
 
 // Initialize the templates
-$template = new WordPressTemplate(
+$template = new WordPressTemplates(
 	array( plugin_dir_path( __FILE__ ) . 'templates' ), // path to template files in plugin
 	'my-plugin-theme-folder' // folder in current theme
 );

@@ -9,7 +9,7 @@ use Twig\Error\SyntaxError;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 
-class TwigTemplate {
+class TwigTemplates {
 	/** @var Environment */
 	private Environment $twig;
 

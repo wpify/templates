@@ -2,7 +2,7 @@
 
 namespace Wpify\Templates;
 
-class WordPressTemplate {
+class WordPressTemplates {
 	/** @var string[] */
 	private $folders;
 
