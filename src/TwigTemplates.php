@@ -17,6 +17,8 @@ class TwigTemplates implements Templates {
 	/** @var Environment */
 	private Environment $twig;
 
+	private array $args;
+
 	/**
 	 * Template hierarchy files.
 	 *
@@ -53,6 +55,8 @@ class TwigTemplates implements Templates {
 	 * @param bool $debug
 	 */
 	public function __construct( array $folders = array(), array $args = array() ) {
+		$this->args = $args;
+
 		if ( isset( $args['integrate'] ) && $args['integrate'] ) {
 			$folders[] = get_template_directory();
 
@@ -94,11 +98,7 @@ class TwigTemplates implements Templates {
 			$this->twig->addExtension( new DebugExtension() );
 		}
 
-		$this->twig->addFunction( new TwigFunction( 'get_header', 'get_header' ) );
-		$this->twig->addFunction( new TwigFunction( 'have_posts', 'have_posts' ) );
-		$this->twig->addFunction( new TwigFunction( 'the_post', 'the_post' ) );
-		$this->twig->addFunction( new TwigFunction( 'the_content', 'the_content' ) );
-		$this->twig->addFunction( new TwigFunction( 'get_footer', 'get_footer' ) );
+		$this->add_functions();
 	}
 
 	/**
@@ -239,7 +239,7 @@ class TwigTemplates implements Templates {
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/load_template/
 	 */
-	public function add_globals() {
+	private function add_globals() {
 		global $posts, $post, $wp_did_header, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
 
 		$variables = array_merge( array(
@@ -259,6 +259,26 @@ class TwigTemplates implements Templates {
 		foreach ( $variables as $name => $value ) {
 			$this->twig->addGlobal( $name, $value );
 		}
+
+		if ( ! empty( $this->args['globals'] ) && is_array( $this->args['globals'] ) ) {
+			foreach ( $this->args['globals'] as $name => $value ) {
+				$this->twig->addGlobal( $name, $value );
+			}
+		}
+	}
+
+	private function add_functions() {
+		$this->twig->addFunction( new TwigFunction( 'get_header', 'get_header' ) );
+		$this->twig->addFunction( new TwigFunction( 'have_posts', 'have_posts' ) );
+		$this->twig->addFunction( new TwigFunction( 'the_post', 'the_post' ) );
+		$this->twig->addFunction( new TwigFunction( 'the_content', 'the_content' ) );
+		$this->twig->addFunction( new TwigFunction( 'get_footer', 'get_footer' ) );
+
+		if ( ! empty( $this->args['functions'] ) && is_array( $this->args['functions'] ) ) {
+			foreach ( $this->args['functions'] as $name => $callable ) {
+				$this->twig->addFunction( new TwigFunction( $name, $callable ) );
+			}
+		}
 	}
 
 	public function template_include( string $template ) {
@@ -273,9 +293,5 @@ class TwigTemplates implements Templates {
 		}
 
 		return $template;
-	}
-
-	public function execute_php() {
-
 	}
 }

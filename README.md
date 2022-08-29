@@ -35,7 +35,7 @@ The above examples tries to find the templates in the following locations:
 
 ## Twig templates
 
-You can also use twig templates for rendering. 
+You can also use twig templates for rendering. WordPress global variables and some functions are already registered.
 
 ```php
 use Wpify\Templates\TwigTemplates;
@@ -48,6 +48,14 @@ $template = new TwigTemplates(
 	),
 	array(
 		'integrate' => true, // Allows twig templates for the current theme
+		'functions' => array( // Register custom functions.
+			'test_function' => function() {
+				echo 'TEST';
+			}
+		),
+		'globals' => array( // Register global variables.
+			'global_variable' => 'some value',
+		)
 	)
 );
 
