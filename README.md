@@ -15,7 +15,7 @@ use Wpify\Templates\WordPressTemplates;
 $template = new WordPressTemplates(
 	array(
 		plugin_dir_path( __FILE__ ) . 'templates', // path to template files in plugin
-		get_template_directory() . 'my-plugin', // path to template files in current theme 
+		trailingslashit( get_template_directory() ) . 'my-plugin', // path to template files in current theme 
 	), 
 );
 
