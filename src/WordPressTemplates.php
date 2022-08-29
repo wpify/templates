@@ -2,77 +2,64 @@
 
 namespace Wpify\Templates;
 
-class WordPressTemplates {
+/**
+ * Load PHP templates the WordPress way.
+ *
+ * It accepts absolute or relative folders. If relative folder, it tries load templates from theme folder. If absolute
+ * folder, it loads from that folder whenever it sits. The order of folders sets its priority.
+ */
+class WordPressTemplates implements Templates {
 	/** @var string[] */
-	private $folders;
+	private array $folders;
 
-	/** @var string */
-	private $theme_folder;
-
-	/**
-	 * @param string[] $folders
-	 * @param ?string $theme_folder
-	 */
-	public function __construct( array $folders, string $theme_folder = null ) {
-		$this->folders      = array_map( 'untrailingslashit', $folders );
-		$this->theme_folder = untrailingslashit( $theme_folder );
+	public function __construct( array $folders = array(), array $args = array() ) {
+		$this->folders = array_map( 'untrailingslashit', $folders );
 	}
 
-	/**
-	 * Renders the template and prints the result.
-	 *
-	 * @param string $slug The slug name for the generic template.
-	 * @param string|null $name The name of the specialised template.
-	 * @param array $args Additional arguments passed to the template.
-	 */
 	public function print( string $slug, string $name = null, array $args = array() ): void {
 		echo $this->render( $slug, $name, $args );
 	}
 
 	/**
-	 * Renders the template and returns the result.
-	 *
-	 * @param string $slug The slug name for the generic template.
-	 * @param string|null $name The name of the specialised template.
-	 * @param array $args Additional arguments passed to the template.
-	 *
-	 * @return string
+	 * @throws TemplateNotFoundException
 	 */
 	public function render( string $slug, string $name = null, array $args = array() ): string {
 		ob_start();
 
-		if ( ! empty( $this->theme_folder ) ) {
-			$rendered = get_template_part( $this->theme_folder . '/' . $slug, $name, $args ) !== false;
-		} else {
+		$rendered = false;
+		$filename = empty( trim( $name ) ) ? trim( $slug ) : trim( $slug ) . '-' . trim( $name );
+
+		foreach ( $this->folders as $folder ) {
+			$folder = trim( $folder );
+
+			if ( 0 === strpos( $folder, '/' ) ) {
+				// it's an absolute path
+				$template = file_exists( $folder . '/' . $filename . '.php' );
+
+				if ( file_exists( $template ) ) {
+					$rendered = true;
+
+					load_template( $template, false, $args );
+				}
+			} else {
+				// it's a relative path, so we try to load a template from theme
+				$rendered = get_template_part( $folder . '/' . $slug, $name, $args ) !== false;
+			}
+
+			if ( true === $rendered ) {
+				break;
+			}
+		}
+
+		// If the template is not rendered and is relative, we try to load it from theme directly
+		if ( false === $rendered && 0 !== strpos( $folder, '/' ) ) {
 			$rendered = get_template_part( $slug, $name, $args ) !== false;
 		}
 
-		if ( ! $rendered ) {
-			load_template( $this->get_template_path( $slug, $name ), false, $args );
+		if ( $rendered === false ) {
+			throw new TemplateNotFoundException( 'The template ' . $filename . ' was not found.' );
 		}
 
 		return ob_get_clean();
-	}
-
-	public function get_template_path( string $slug, string $name = null ) {
-		$templates = array();
-
-		if ( ! empty( $name ) ) {
-			foreach ( $this->folders as $folder ) {
-				$templates[] = $folder . '/' . $slug . '-' . $name . '.php';
-			}
-		}
-
-		foreach ( $this->folders as $folder ) {
-			$templates[] = $folder . '/' . $slug . '.php';
-		}
-
-		foreach ( $templates as $template ) {
-			if ( file_exists( $template ) ) {
-				return $template;
-			}
-		}
-
-		return '';
 	}
 }

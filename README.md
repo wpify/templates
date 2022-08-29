@@ -13,8 +13,10 @@ use Wpify\Templates\WordPressTemplates;
 
 // Initialize the templates
 $template = new WordPressTemplates(
-	array( plugin_dir_path( __FILE__ ) . 'templates' ), // path to template files in plugin
-	'my-plugin-theme-folder' // folder in current theme
+	array(
+		plugin_dir_path( __FILE__ ) . 'templates', // path to template files in plugin
+		get_template_directory() . 'my-plugin', // path to template files in current theme 
+	), 
 );
 
 // Print the html to frontend 
@@ -30,3 +32,28 @@ The above examples tries to find the templates in the following locations:
 * `/wp-content/themes/current-theme/my-plugin-theme-folder/my-template.php`
 * `/wp-content/plugins/my-plugin/templates/my-template.test.php`
 * `/wp-content/plugins/my-plugin/templates/my-template.php`
+
+## Twig templates
+
+You can also use twig templates for rendering. 
+
+```php
+use Wpify\Templates\TwigTemplates;
+
+// Initialize the templates
+$template = new TwigTemplates(
+	array(
+		plugin_dir_path( __FILE__ ) . 'templates', // path to template files in plugin
+		get_template_directory() . 'my-plugin', // path to template files in current theme 
+	),
+	array(
+		'integrate' => true, // Allows twig templates for the current theme
+	)
+);
+
+// Print the html to frontend 
+$template->print( 'my-template', 'test', array( 'some-args' => 'test' ) );
+
+// Return the html
+$html = $template->render( 'my-template', 'test', array( 'some-args' => 'test' ) );
+```
