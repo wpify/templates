@@ -51,8 +51,8 @@ class WordPressTemplates implements Templates {
 			}
 		}
 
-		// If the template is not rendered and is relative, we try to load it from theme directly
-		if ( false === $rendered && 0 !== strpos( $folder, '/' ) ) {
+		// If the template is not rendered, we try to load it from theme directly
+		if ( false === $rendered ) {
 			$rendered = get_template_part( $slug, $name, $args ) !== false;
 		}
 
