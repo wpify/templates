@@ -34,7 +34,7 @@ class WordPressTemplates implements Templates {
 
 			if ( 0 === strpos( $folder, '/' ) ) {
 				// it's an absolute path
-				$template = file_exists( $folder . '/' . $filename . '.php' );
+				$template = $folder . '/' . $filename . '.php';
 
 				if ( file_exists( $template ) ) {
 					$rendered = true;
