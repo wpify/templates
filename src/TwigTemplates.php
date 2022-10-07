@@ -141,10 +141,6 @@ class TwigTemplates implements Templates {
 
 		$this->add_globals();
 
-		foreach ( $args as $name => $value ) {
-			$this->twig->addGlobal( $name, $value );
-		}
-
 		return $this->twig->render( $filename, $args );
 	}
 
