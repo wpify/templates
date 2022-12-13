@@ -94,11 +94,8 @@ class TwigTemplates implements Templates {
 			'auto_reload' => true,
 		) );
 
-		if ( $debug ) {
-			$this->twig->addExtension( new DebugExtension() );
-		}
-
 		$this->add_functions();
+		$this->add_extensions();
 	}
 
 	/**
@@ -273,6 +270,20 @@ class TwigTemplates implements Templates {
 		if ( ! empty( $this->args['functions'] ) && is_array( $this->args['functions'] ) ) {
 			foreach ( $this->args['functions'] as $name => $callable ) {
 				$this->twig->addFunction( new TwigFunction( $name, $callable ) );
+			}
+		}
+	}
+
+	private function add_extensions() {
+		$debug = $this->args['debug'] ?? false;
+
+		if ( $debug ) {
+			$this->twig->addExtension( new DebugExtension() );
+		}
+
+		if ( ! empty( $this->args['extensions'] ) && is_array( $this->args['extensions'] ) ) {
+			foreach ( $this->args['extensions'] as $extension ) {
+				$this->twig->addFunction( $extension );
 			}
 		}
 	}
