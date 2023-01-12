@@ -51,8 +51,8 @@ class TwigTemplates implements Templates {
 	/**
 	 *
 	 * @param string[] $folders
-	 * @param string $compilation_path
-	 * @param bool $debug
+	 * @param string   $compilation_path
+	 * @param bool     $debug
 	 */
 	public function __construct( array $folders = array(), array $args = array() ) {
 		$this->args = $args;
@@ -101,9 +101,9 @@ class TwigTemplates implements Templates {
 	/**
 	 * Renders the template and prints the result.
 	 *
-	 * @param string $slug The slug name for the generic template.
+	 * @param string      $slug The slug name for the generic template.
 	 * @param string|null $name
-	 * @param array $args Additional arguments passed to the template.
+	 * @param array       $args Additional arguments passed to the template.
 	 *
 	 * @throws LoaderError
 	 * @throws RuntimeError
@@ -116,9 +116,9 @@ class TwigTemplates implements Templates {
 	/**
 	 * Renders the template and returns the result.
 	 *
-	 * @param string $slug The slug name for the generic template.
+	 * @param string      $slug The slug name for the generic template.
 	 * @param string|null $name
-	 * @param array $args Additional arguments passed to the template.
+	 * @param array       $args Additional arguments passed to the template.
 	 *
 	 * @return string
 	 * @throws LoaderError
@@ -169,8 +169,8 @@ class TwigTemplates implements Templates {
 	 *
 	 * @see https://developer.wordpress.org/reference/classes/wp_theme/get_post_templates/
 	 *
-	 * @param array $page_templates
-	 * @param WP_Theme $theme
+	 * @param array        $page_templates
+	 * @param WP_Theme     $theme
 	 * @param WP_Post|null $post
 	 *
 	 * @return array
@@ -283,7 +283,7 @@ class TwigTemplates implements Templates {
 
 		if ( ! empty( $this->args['extensions'] ) && is_array( $this->args['extensions'] ) ) {
 			foreach ( $this->args['extensions'] as $extension ) {
-				$this->twig->addFunction( $extension );
+				$this->twig->addExtension( $extension );
 			}
 		}
 	}
