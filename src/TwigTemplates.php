@@ -15,7 +15,7 @@ use WP_Theme;
 
 class TwigTemplates implements Templates {
 	/** @var Environment */
-	private Environment $twig;
+	public Environment $twig;
 
 	private array $args;
 
