@@ -126,7 +126,7 @@ class TwigTemplates implements Templates {
 	 * @throws SyntaxError
 	 */
 	public function render( string $slug, string $name = null, array $args = array() ): string {
-		if ( empty( trim( $name ) ) ) {
+		if ( empty($name) || empty( trim( $name ) ) ) {
 			$filename = trim( $slug );
 		} else {
 			$filename = trim( $slug ) . '-' . trim( $name );
