@@ -19,9 +19,10 @@ class TwigTemplates implements Templates {
 
 	private array $args;
 
+	private $globals_added = false;
+
 	/**
 	 * Template hierarchy files.
-	 *
 	 * @see https://developer.wordpress.org/reference/hooks/type_template_hierarchy/
 	 * @var string[]
 	 */
@@ -49,10 +50,9 @@ class TwigTemplates implements Templates {
 	private string $extension = 'twig';
 
 	/**
-	 *
-	 * @param string[] $folders
-	 * @param string   $compilation_path
-	 * @param bool     $debug
+	 * @param  string[]  $folders
+	 * @param  string  $compilation_path
+	 * @param  bool  $debug
 	 */
 	public function __construct( array $folders = array(), array $args = array() ) {
 		$this->args = $args;
@@ -101,9 +101,9 @@ class TwigTemplates implements Templates {
 	/**
 	 * Renders the template and prints the result.
 	 *
-	 * @param string      $slug The slug name for the generic template.
-	 * @param string|null $name
-	 * @param array       $args Additional arguments passed to the template.
+	 * @param  string  $slug  The slug name for the generic template.
+	 * @param  string|null  $name
+	 * @param  array  $args  Additional arguments passed to the template.
 	 *
 	 * @throws LoaderError
 	 * @throws RuntimeError
@@ -116,9 +116,9 @@ class TwigTemplates implements Templates {
 	/**
 	 * Renders the template and returns the result.
 	 *
-	 * @param string      $slug The slug name for the generic template.
-	 * @param string|null $name
-	 * @param array       $args Additional arguments passed to the template.
+	 * @param  string  $slug  The slug name for the generic template.
+	 * @param  string|null  $name
+	 * @param  array  $args  Additional arguments passed to the template.
 	 *
 	 * @return string
 	 * @throws LoaderError
@@ -126,7 +126,7 @@ class TwigTemplates implements Templates {
 	 * @throws SyntaxError
 	 */
 	public function render( string $slug, string $name = null, array $args = array() ): string {
-		if ( empty($name) || empty( trim( $name ) ) ) {
+		if ( empty( $name ) || empty( trim( $name ) ) ) {
 			$filename = trim( $slug );
 		} else {
 			$filename = trim( $slug ) . '-' . trim( $name );
@@ -144,7 +144,7 @@ class TwigTemplates implements Templates {
 	/**
 	 * Add twig templates to array of templates.
 	 *
-	 * @param array $templates
+	 * @param  array  $templates
 	 *
 	 * @return array
 	 */
@@ -166,12 +166,11 @@ class TwigTemplates implements Templates {
 
 	/**
 	 * Return custom templates from theme directory.
-	 *
 	 * @see https://developer.wordpress.org/reference/classes/wp_theme/get_post_templates/
 	 *
-	 * @param array        $page_templates
-	 * @param WP_Theme     $theme
-	 * @param WP_Post|null $post
+	 * @param  array  $page_templates
+	 * @param  WP_Theme  $theme
+	 * @param  WP_Post|null  $post
 	 *
 	 * @return array
 	 */
@@ -233,21 +232,28 @@ class TwigTemplates implements Templates {
 	 * @see https://developer.wordpress.org/reference/functions/load_template/
 	 */
 	private function add_globals() {
+		if ( $this->globals_added ) {
+			return;
+		}
+
 		global $posts, $post, $wp_did_header, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
 
-		$variables = array_merge( array(
-			'posts'         => $posts,
-			'post'          => $post,
-			'wp_did_header' => $wp_did_header,
-			'wp_query'      => $wp_query,
-			'wp_rewrite'    => $wp_rewrite,
-			'wpdb'          => $wpdb,
-			'wp_version'    => $wp_version,
-			'wp'            => $wp,
-			'id'            => $id,
-			'comment'       => $comment,
-			'user_ID'       => $user_ID
-		), $wp_query->query_vars );
+		$variables = array_merge(
+			array(
+				'posts'         => $posts,
+				'post'          => $post,
+				'wp_did_header' => $wp_did_header,
+				'wp_query'      => $wp_query,
+				'wp_rewrite'    => $wp_rewrite,
+				'wpdb'          => $wpdb,
+				'wp_version'    => $wp_version,
+				'wp'            => $wp,
+				'id'            => $id,
+				'comment'       => $comment,
+				'user_ID'       => $user_ID,
+			),
+			$wp_query->query_vars
+		);
 
 		foreach ( $variables as $name => $value ) {
 			$this->twig->addGlobal( $name, $value );
@@ -258,6 +264,7 @@ class TwigTemplates implements Templates {
 				$this->twig->addGlobal( $name, $value );
 			}
 		}
+		$this->globals_added = true;
 	}
 
 	private function add_functions() {
