@@ -26,8 +26,10 @@ class WordPressTemplates implements Templates {
 	public function render( string $slug, string $name = null, array $args = array() ): string {
 		ob_start();
 
+		$slug     = trim( $slug );
+		$name     = trim( $name ?? '' );
 		$rendered = false;
-		$filename = empty( trim( $name ) ) ? trim( $slug ) : trim( $slug ) . '-' . trim( $name );
+		$filename = empty( $name ) ? $slug : $slug . '-' . $name;
 
 		foreach ( $this->folders as $folder ) {
 			$folder = trim( $folder );
