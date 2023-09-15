@@ -72,6 +72,12 @@ class TwigTemplates implements Templates {
 		$loader = new FilesystemLoader( array_map( 'untrailingslashit', $folders ) );
 		$debug  = $args['debug'] ?? false;
 
+		if ( ! empty( $args['namespaces'] ) ) {
+			foreach ( $args['namespaces'] as $namespace => $path ) {
+				$loader->addPath( $path, $namespace );
+			}
+		}
+
 		if ( ! empty( $args['cache'] ) ) {
 			$cache = $args['cache'];
 		} else {
