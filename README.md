@@ -55,7 +55,10 @@ $template = new TwigTemplates(
 		),
 		'globals' => array( // Register global variables.
 			'global_variable' => 'some value',
-		)
+		),
+		'namespaces' => array(
+			'blocks' => get_template_directory() . '/blocks',
+		),
 	)
 );
 
