@@ -8,6 +8,7 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 use WP_Filesystem_Base;
 use WP_Post;
@@ -101,6 +102,7 @@ class TwigTemplates implements Templates {
 		) );
 
 		$this->add_functions();
+		$this->add_filters();
 		$this->add_extensions();
 	}
 
@@ -283,6 +285,14 @@ class TwigTemplates implements Templates {
 		if ( ! empty( $this->args['functions'] ) && is_array( $this->args['functions'] ) ) {
 			foreach ( $this->args['functions'] as $name => $callable ) {
 				$this->twig->addFunction( new TwigFunction( $name, $callable ) );
+			}
+		}
+	}
+
+	private function add_filters() {
+		if ( ! empty( $this->args['filters'] ) && is_array( $this->args['filters'] ) ) {
+			foreach ( $this->args['filters'] as $name => $callable ) {
+				$this->twig->addFilter( new TwigFilter( $name, $callable ) );
 			}
 		}
 	}

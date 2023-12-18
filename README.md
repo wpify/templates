@@ -48,10 +48,16 @@ $template = new TwigTemplates(
 	),
 	array(
 		'integrate' => true, // Allows twig templates for the current theme
+		'debug'     => true, // Enable twig debug
 		'functions' => array( // Register custom functions.
 			'test_function' => function() {
 				echo 'TEST';
-			}
+			},
+		),
+		'filters' => array( // Register custom filters.
+			'test_filter' => function( $value ) {
+				echo 'TEST:' . $value;
+			},
 		),
 		'globals' => array( // Register global variables.
 			'global_variable' => 'some value',
