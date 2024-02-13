@@ -82,17 +82,11 @@ class TwigTemplates implements Templates {
 		if ( ! empty( $args['cache'] ) ) {
 			$cache = $args['cache'];
 		} else {
-			/** @var WP_Filesystem_Base $wp_filesystem */
-			global $wp_filesystem;
-
-			if ( empty( $wp_filesystem ) ) {
-				require_once ABSPATH . '/wp-admin/includes/file.php';
-				WP_Filesystem();
-			}
-
 			$upload = wp_get_upload_dir();
 			$cache  = $upload['basedir'] . '/cache/wpify-twig-templates';
-			$wp_filesystem->mkdir( $cache );
+			if ( ! file_exists( $cache ) ) {
+				wp_mkdir_p( $cache );
+			}
 		}
 
 		$this->twig = new Environment( $loader, array(
