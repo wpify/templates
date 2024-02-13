@@ -146,7 +146,7 @@ class TwigTemplates implements Templates {
 
 		$this->add_globals();
 
-		return $this->twig->render( $filename, $args );
+		return $this->twig->render( $filename, apply_filters( 'wpify_templates_template_args', $args, $slug, $name, $filename, $this ) );
 	}
 
 	/**
