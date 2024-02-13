@@ -31,11 +31,13 @@ class WordPressTemplates implements Templates {
 		$rendered = false;
 		$filename = empty( $name ) ? $slug : $slug . '-' . $name;
 
+		$args = apply_filters( 'wpify_templates_template_args', $args, $slug, $name, $filename, $this );
+
 		foreach ( $this->folders as $folder ) {
 			$folder = trim( $folder );
 
 			if ( 0 === strpos( $folder, '/' ) ) {
-				// it's an absolute path
+				// it's an absolute path.
 				$template = $folder . '/' . $filename . '.php';
 
 				if ( file_exists( $template ) ) {
@@ -44,7 +46,7 @@ class WordPressTemplates implements Templates {
 					load_template( $template, false, $args );
 				}
 			} else {
-				// it's a relative path, so we try to load a template from theme
+				// it's a relative path, so we try to load a template from theme.
 				$rendered = get_template_part( $folder . '/' . $slug, $name, $args ) !== false;
 			}
 
@@ -53,7 +55,7 @@ class WordPressTemplates implements Templates {
 			}
 		}
 
-		// If the template is not rendered, we try to load it from theme directly
+		// If the template is not rendered, we try to load it from theme directly.
 		if ( false === $rendered ) {
 			$rendered = get_template_part( $slug, $name, $args ) !== false;
 		}
