@@ -260,6 +260,8 @@ class TwigTemplates implements Templates {
 			$wp_query->query_vars
 		);
 
+		$variables = apply_filters( 'wpify_templates_global_variables', $variables );
+		
 		foreach ( $variables as $name => $value ) {
 			$this->twig->addGlobal( $name, $value );
 		}
