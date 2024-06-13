@@ -275,15 +275,16 @@ class TwigTemplates implements Templates {
 	}
 
 	private function add_functions() {
-		$this->twig->addFunction( new TwigFunction( 'get_header', 'get_header' ) );
-		$this->twig->addFunction( new TwigFunction( 'have_posts', 'have_posts' ) );
-		$this->twig->addFunction( new TwigFunction( 'the_post', 'the_post' ) );
-		$this->twig->addFunction( new TwigFunction( 'the_content', 'the_content' ) );
-		$this->twig->addFunction( new TwigFunction( 'get_footer', 'get_footer' ) );
+		$options = array( 'is_safe' => array( 'html' ) );
+		$this->twig->addFunction( new TwigFunction( 'get_header', 'get_header', $options ) );
+		$this->twig->addFunction( new TwigFunction( 'have_posts', 'have_posts', $options ) );
+		$this->twig->addFunction( new TwigFunction( 'the_post', 'the_post', $options ) );
+		$this->twig->addFunction( new TwigFunction( 'the_content', 'the_content', $options ) );
+		$this->twig->addFunction( new TwigFunction( 'get_footer', 'get_footer', $options ) );
 
 		if ( ! empty( $this->args['functions'] ) && is_array( $this->args['functions'] ) ) {
 			foreach ( $this->args['functions'] as $name => $callable ) {
-				$this->twig->addFunction( new TwigFunction( $name, $callable ) );
+				$this->twig->addFunction( new TwigFunction( $name, $callable, $options ) );
 			}
 		}
 	}
