@@ -140,7 +140,11 @@ class TwigTemplates implements Templates {
 
 		$this->add_globals();
 
-		return $this->twig->render( $filename, apply_filters( 'wpify_templates_template_args', $args, $slug, $name, $filename, $this ) );
+		$args = apply_filters( "wpify_templates_template_args_{$slug}_{$name}", $args, $slug, $name, $filename, $this );
+		$args = apply_filters( "wpify_templates_template_args_{$slug}", $args, $slug, $name, $filename, $this );
+		$args = apply_filters( 'wpify_templates_template_args', $args, $slug, $name, $filename, $this );
+
+		return $this->twig->render( $filename, $args );
 	}
 
 	/**
@@ -261,7 +265,7 @@ class TwigTemplates implements Templates {
 		);
 
 		$variables = apply_filters( 'wpify_templates_global_variables', $variables );
-		
+
 		foreach ( $variables as $name => $value ) {
 			$this->twig->addGlobal( $name, $value );
 		}
